@@ -16,7 +16,7 @@ import static transcoder.hc.com.ui_study.MainActivity.TAG;
  * Created by ly on 2019/4/15.
  */
 
-public class AppStringHelper {
+public class MD5Utils {
 
     //md5加密string
     public static String getMD5Code(String info){
