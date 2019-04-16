@@ -17,6 +17,8 @@ import java.security.KeyPair;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 
+import transcoder.hc.com.ui_study.base.Base64Decoder;
+
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     public static String TAG = "lylog";
@@ -70,16 +72,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         KeyPair keyPair = RSAUtils.generateRSAKeyPair(RSAUtils.DEFAULT_KEY_SIZE);
         RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
         RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
-        byte[] encryptBytes= new byte[0];
+        byte[] encryptBytes = new byte[0];
         String secretKey = AESUtils.generateKey();
         String encryStraes = AESUtils.encrypt(secretKey, orin);
 
         try {
-            encryptBytes = RSAUtils.encryptByPublicKeyForSpilt(orin.getBytes(),publicKey.getEncoded());
+            encryptBytes = RSAUtils.encryptByPublicKeyForSpilt(orin.getBytes(), publicKey.getEncoded());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String encryStr= Base64.encodeToString(encryptBytes,Base64.DEFAULT);
+        String encryStr = Base64.encodeToString(encryptBytes, Base64.DEFAULT);
         switch (v.getId()) {
             case R.id.md5:
                 if (orin != null) {
@@ -89,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.aes:
 
-                Log.d(TAG, "onClick: encryStraes ="+encryStraes +"  secretKey"+secretKey);
+                Log.d(TAG, "onClick: encryStraes =" + encryStraes + "  secretKey" + secretKey);
                 textResult.setText(encryStraes);
 
                 break;
@@ -99,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     System.out.println("私钥:" + privateKey);
                     System.out.println("公钥:" + publicKey);
-                    Log.d(TAG, "onClick: encryStr ="+encryStr);
+                    Log.d(TAG, "onClick: encryStr =" + encryStr);
                     textResult.setText(encryStr);
 
                 } catch (Exception e) {
@@ -115,21 +117,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
             case R.id.aes_jie:
-
                 String decryStraes = AESUtils.decrypt(secretKey, encryStraes);
                 textResult_jie.setText(decryStraes);
                 break;
             case R.id.rsa_jie:
-            //私钥解密
+                //私钥解密
                 try {
-                    byte[] decryptBytes=  RSAUtils.decryptByPrivateKeyForSpilt(Base64.decode(encryStr,Base64.DEFAULT),privateKey.getEncoded());
-                    String decryStr=new String(decryptBytes);
+                    byte[] decryptBytes = RSAUtils.decryptByPrivateKeyForSpilt(Base64Decoder.decodeToBytes(encryStr), privateKey.getEncoded());
+                    String decryStr = new String(decryptBytes);
                     textResult_jie.setText(decryStr);
-            } catch (Exception e) {
+                } catch (Exception e) {
                     Log.d(TAG, "onClick: error");
                     e.printStackTrace();
                 }
-                Log.d(TAG, "bijiao: =?\n"+encryStr +"\n"+textResult.getText().toString());
+                Log.d(TAG, "bijiao: =?\n" + encryStr + "\n" + textResult.getText().toString());
                 break;
         }
     }

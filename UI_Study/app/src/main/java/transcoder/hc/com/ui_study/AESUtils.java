@@ -12,6 +12,9 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
+import transcoder.hc.com.ui_study.base.Base64Decoder;
+import transcoder.hc.com.ui_study.base.Base64Encoder;
+
 public class AESUtils {
     private final static String HEX = "0123456789ABCDEF";
     private  static final String CBC_PKCS5_PADDING = "AES/CBC/PKCS5Padding";//AES是加密方式 CBC是工作模式 PKCS5Padding是填充模式
@@ -68,8 +71,8 @@ public class AESUtils {
         }
         try {
             byte[] result = encrypt(key, cleartext.getBytes());
-//            return Base64Encoder.encode(result);
-            return new String(Base64.encode(result,Base64.DEFAULT));
+            return Base64Encoder.encode(result);
+            //return new String(Base64.encode(result,Base64.DEFAULT));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -95,8 +98,8 @@ public class AESUtils {
             return encrypted;
         }
         try {
-//            byte[] enc = Base64Decoder.decodeToBytes(encrypted);
-            byte[] enc = Base64.decode(encrypted,Base64.DEFAULT);
+            byte[] enc = Base64Decoder.decodeToBytes(encrypted);
+//            byte[] enc = Base64.decode(encrypted,Base64.DEFAULT);
             byte[] result = decrypt(key, enc);
             return new String(result);
         } catch (Exception e) {
